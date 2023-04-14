@@ -1,6 +1,6 @@
 
 export enum LocationType {
-  Land = 'land',
-  Sea = 'sea',
-  Both = 'both'
+  Land = 'Land',
+  Sea = 'Sea',
+  Both = 'Both'
 }

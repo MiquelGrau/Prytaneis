@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CityModel } from './core/models/city.model';
 import { CoordsModel } from './core/models/coords.model';
 import { LocationType } from './core/enums/location.type';
-import { CaravanModel, PersonModel, ShipModel, VehicleModel } from './core/models/vehicle.model';
+import { ShipModel, VehicleModel } from './core/models/vehicle.model';
+import {VehicleService} from "./core/services/vehicle.service";
 
 @Component({
   selector: 'app-root',
@@ -17,15 +18,15 @@ export class AppComponent implements OnInit {
     new CityModel('San Francisco', new CoordsModel(37.7749, -122.4194), LocationType.Both),
   ];
 
-  vehicles: VehicleModel[] = [
-    new ShipModel('Titanic', new CoordsModel(41.7325, -49.9469)),
-    new CaravanModel('Ford F-150', new CoordsModel(39.2904, -76.6122)),
-    new PersonModel('John', new CoordsModel(42.3601, -71.0589))
-  ];
+  vehicles: VehicleModel[] = [];
 
-  constructor() {}
+  constructor(private readonly vehicleService: VehicleService) {}
 
   ngOnInit() {
+    this.vehicleService.getVehicles().subscribe((res: any) => {
+      this.vehicles = res.data.map((vehicle: any) => VehicleModel.fromJson(vehicle));
+      console.log(this.vehicles);
+    });
   }
 
   createCity(): void {

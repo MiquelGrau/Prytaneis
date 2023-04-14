@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { VehicleModel } from '../models/vehicle.model';
 import { CityModel, CurrentCityModel } from '../models/city.model';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VehicleService {
+
+  constructor(private http: HttpClient) {}
+
+  public getVehicles(): Observable<any> {
+    return this.http.get(environment.api_url + '/vehicle');
+  }
 
   public moveVehicleToCity(vehicle: VehicleModel, city: CityModel): void {
     if (vehicle.currentCity === null || vehicle.currentCity.id !== city.id) {
