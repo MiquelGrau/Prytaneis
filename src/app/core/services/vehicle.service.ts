@@ -13,7 +13,7 @@ export class VehicleService {
   constructor(private http: HttpClient) {}
 
   public getVehicles(): Observable<any> {
-    return this.http.get(environment.api_url + '/vehicle');
+    return this.http.get(environment.api_url + '/vehicles');
   }
 
   public moveVehicleToCity(vehicle: VehicleModel, city: CityModel): void {

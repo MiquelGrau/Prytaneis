@@ -28,6 +28,22 @@ export class CityModel {
     this.vehicles = [];
   }
 
+  static fromJson(json: any): CityModel {
+    const name = json.name;
+    const position = new CoordsModel(json.position.x, json.position.y);
+    const locationType = json.locationType;
+    const city = new CityModel(name, position, locationType);
+
+    if (json.vehicles && json.vehicles.length > 0) {
+      json.vehicles.forEach((vehicleJson: any) => {
+        const vehicle = VehicleModel.fromJson(vehicleJson);
+        city.addVehicle(vehicle);
+      });
+    }
+
+    return city;
+  }
+
   addVehicle(vehicle: VehicleModel): void {
     this.vehicles.push(vehicle);
   }

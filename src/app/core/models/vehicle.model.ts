@@ -20,7 +20,7 @@ export abstract class VehicleModel {
 
   abstract canMove(locationType: LocationType): boolean;
 
-    static fromJson(json: any): VehicleModel {
+  static fromJson(json: any): VehicleModel {
     const name = json.name;
     const position = new CoordsModel(json.position.x, json.position.y);
     if (json.movementRestrictions === LocationType.Sea) {

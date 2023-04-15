@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, of } from 'rxjs';
-import * as vehicleMock from '../../../assets/mock-data/vehicle.mock.json';
+import * as vehiclesMock from '../../../assets/mock-data/vehicles.mock.json';
+import * as citiesMock from '../../../assets/mock-data/cities.mock.json';
 import { environment } from 'src/environments/environment';
 
 const urls = [
   {
-    url: environment.api_url + '/vehicle',
-    json: vehicleMock
+    url: environment.api_url + '/vehicles',
+    json: vehiclesMock
+  },
+  {
+    url: environment.api_url + '/cities',
+    json: citiesMock
   },
 ]
 

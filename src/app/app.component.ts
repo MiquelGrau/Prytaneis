@@ -4,6 +4,7 @@ import { CoordsModel } from './core/models/coords.model';
 import { LocationType } from './core/enums/location.type';
 import { ShipModel, VehicleModel } from './core/models/vehicle.model';
 import {VehicleService} from "./core/services/vehicle.service";
+import {CityService} from "./core/services/city.service";
 
 @Component({
   selector: 'app-root',
@@ -12,20 +13,20 @@ import {VehicleService} from "./core/services/vehicle.service";
 })
 export class AppComponent implements OnInit {
   title = 'Prytaneis';
-  cities: CityModel[] = [
-    new CityModel('New York', new CoordsModel(40.7128, -74.0060), LocationType.Land),
-    new CityModel('Los Angeles', new CoordsModel(34.0522, -118.2437), LocationType.Both),
-    new CityModel('San Francisco', new CoordsModel(37.7749, -122.4194), LocationType.Both),
-  ];
-
+  cities: CityModel[] = [];
   vehicles: VehicleModel[] = [];
 
-  constructor(private readonly vehicleService: VehicleService) {}
+  constructor(
+    private readonly vehicleService: VehicleService,
+    private readonly cityService: CityService
+  ) {}
 
   ngOnInit() {
     this.vehicleService.getVehicles().subscribe((res: any) => {
       this.vehicles = res.data.map((vehicle: any) => VehicleModel.fromJson(vehicle));
-      console.log(this.vehicles);
+    });
+    this.cityService.getCities().subscribe((res: any) => {
+      this.cities = res.data.map((city: any) => CityModel.fromJson(city));
     });
   }
 
