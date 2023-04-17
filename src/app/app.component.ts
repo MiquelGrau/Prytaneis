@@ -18,20 +18,16 @@ export class AppComponent implements OnInit {
 
   constructor(
     private readonly vehicleService: VehicleService,
-    private readonly cityService: CityService
   ) {}
 
   ngOnInit() {
     this.vehicleService.getVehicles().subscribe((res: any) => {
       this.vehicles = res.data.map((vehicle: any) => VehicleModel.fromJson(vehicle));
     });
-    this.cityService.getCities().subscribe((res: any) => {
-      this.cities = res.data.map((city: any) => CityModel.fromJson(city));
-    });
   }
 
   createCity(): void {
-    const name = prompt("Enter the name of the new city:");
+    const name = prompt("Enter the name of the new cities:");
     if (name && name.trim() !== "") {
       const position = CoordsModel.getRandomCoords();
       const locationType = LocationType.Sea;

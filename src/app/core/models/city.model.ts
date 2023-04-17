@@ -16,7 +16,7 @@ export class CurrentCityModel {
 export class CityModel {
   id: string;
   name: string;
-  position: CoordsModel; // Tuple representing the coordinates of the city
+  position: CoordsModel; // Tuple representing the coordinates of the cities
   locationType: LocationType; // Possible values: "land", "sea", "both"
   vehicles: VehicleModel[];
 

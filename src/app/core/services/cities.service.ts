@@ -6,7 +6,11 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class CityService {
+export class CitiesService {
 
   constructor(private http: HttpClient) {}
+
+  public getCities(): Observable<any> {
+    return this.http.get(environment.api_url + '/cities');
+  }
 }

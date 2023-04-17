@@ -7,20 +7,22 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { AppComponent } from './app.component';
-import { MockHttpInterceptor } from "./core/interceptors/mock-http.interceptor";
+import { CITIES_REDUCERS } from '../../shared/store/cities/cities.state';
+import { CitiesEffects } from '../../shared/store/cities/cities.effects';
+import { WorldMapComponent } from './world-map.component';
+import { MockHttpInterceptor } from '../../core/interceptors/mock-http.interceptor';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    WorldMapComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    EffectsModule.forRoot([]),
-    StoreModule.forRoot({}, {}),
+    StoreModule.forFeature('cities', CITIES_REDUCERS),
     StoreDevtoolsModule.instrument(),
+    EffectsModule.forRoot([CitiesEffects]),
   ],
   providers: [
     {
@@ -29,6 +31,6 @@ import { MockHttpInterceptor } from "./core/interceptors/mock-http.interceptor";
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
-export class AppModule { }
+export class WorldMapModule { }
