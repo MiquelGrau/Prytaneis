@@ -1,34 +1,4 @@
-<div class="container">
-  <h1 class="title">{{ title }}</h1>
 
-  <div class="section">
-    <h2 class="name">Cities:</h2>
-    <button (click)="createCity()">Create City</button>
-    <ul>
-      <li *ngFor="let city of cities">
-        <strong>Name:</strong> {{ city.name }}<br>
-        <strong>Location:</strong> {{ city.position.y }}, {{ city.position.x }}<br>
-        <strong>Type:</strong> {{ city.locationType }}<br>
-        <strong>Vehicles:</strong>
-        <ul class="vehicles">
-          <li *ngFor="let vehicle of city.vehicles">
-            {{ vehicle.name }} ({{ vehicle.constructor.name }})
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2 class="name">Vehicles:</h2>
-    <button (click)="createShip()">Create Ship</button>
-    <ul>
-      <li *ngFor="let vehicle of vehicles">
-        <strong>Name:</strong> {{ vehicle.name }}<br>
-        <strong>Type:</strong> {{ vehicle.constructor.name }}<br>
-        <strong>Location:</strong> {{ vehicle.position.y }}, {{ vehicle.position.x }}<br>
-        <strong>Movement Restrictions:</strong> {{ vehicle.movementRestrictions }}
-      </li>
-    </ul>
-  </div>
+<div>
+  <router-outlet></router-outlet>
 </div>

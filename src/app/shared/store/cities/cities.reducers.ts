@@ -9,7 +9,7 @@ export const CitiesReducer = createReducer(
   on(loadCities, (state) => {
     return { ...state, loading: true };
   }),
-  on(loadedCities, (state, { cities }) => {
-    return { ...state, loading: false, citiesList: cities };
+  on(loadedCities, (state, { citiesList }) => {
+    return { ...state, loading: false, citiesList: citiesList };
   }),
 );

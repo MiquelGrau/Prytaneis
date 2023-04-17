@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { loadCities, loadedCities } from './cities.actions';
 import { CitiesService } from '../../../core/services/cities.service';
@@ -18,8 +18,8 @@ export class CitiesEffects {
       ofType(loadCities),
       switchMap(() => this.citiesService.getCities()
         .pipe(
-          map(cities => (loadedCities({ cities: cities }))),
-          catchError(() => EMPTY)
+          map(citiesList => (loadedCities({ citiesList: citiesList.data }))),
+          catchError(error => of({ type: 'LOAD_CITIES_FAILURE', error }))
         )
       ),
     )

@@ -7,5 +7,5 @@ export const loadCities = createAction(
 
 export const loadedCities = createAction(
   '[Cities] Loaded Cities Success',
-  props<{ cities: CityModel[] }>()
+  props<{ citiesList: CityModel[] }>()
 );

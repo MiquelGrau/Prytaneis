@@ -1,8 +1,12 @@
 import { createSelector } from '@ngrx/store';
 import { CitiesState } from './cities.state';
-import {CitiesStateModel} from './cities-state.model';
+import { CitiesStateModel } from './cities-state.model';
 
-export const selectCitiesFeature = (state: CitiesState) => state.cities;
+export interface CitiesStateT {
+  citiesData: CitiesState
+}
+
+export const selectCitiesFeature = (state: CitiesStateT) => state.citiesData.data;
 
 export const selectCities = createSelector(
   selectCitiesFeature,
