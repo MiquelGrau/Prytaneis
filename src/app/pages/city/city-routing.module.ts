@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SelectedCityComponent } from './selected-city.component';
+import { CityComponent } from './city.component';
 import { CityResolver } from '../../core/resolvers/city.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: SelectedCityComponent,
+    component: CityComponent,
     resolve: { city: CityResolver },
   },
 ];
@@ -16,4 +16,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SelectedCityRoutingModule { }
+export class CityRoutingModule { }

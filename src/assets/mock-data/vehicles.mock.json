@@ -1,35 +1,32 @@
-{
-  "data": [
-    {
-      "id": "00001",
-      "name": "Titanic",
-      "position": {
-        "x": "41.7325",
-        "y": "-49.9469"
-      },
-      "movementRestrictions": "Sea",
-      "currentCity": "null"
+[
+  {
+    "id": "00001",
+    "name": "Titanic",
+    "position": {
+      "x": "41.7325",
+      "y": "-49.9469"
     },
-    {
-      "id": "00002",
-      "name": "Ford F-150",
-      "position": {
-        "x": "39.2904",
-        "y": "-76.6122"
-      },
-      "movementRestrictions": "Land",
-      "currentCity": "null"
+    "movementRestrictions": "Sea",
+    "currentCity": "null"
+  },
+  {
+    "id": "00002",
+    "name": "Ford F-150",
+    "position": {
+      "x": "39.2904",
+      "y": "-76.6122"
     },
-    {
-      "id": "00003",
-      "name": "John",
-      "position": {
-        "x": "42.3601",
-        "y": "-71.0589"
-      },
-      "movementRestrictions": "Both",
-      "currentCity": "null"
-    }
-  ]
-
-}
+    "movementRestrictions": "Land",
+    "currentCity": "null"
+  },
+  {
+    "id": "00003",
+    "name": "John",
+    "position": {
+      "x": "42.3601",
+      "y": "-71.0589"
+    },
+    "movementRestrictions": "Both",
+    "currentCity": "null"
+  }
+]

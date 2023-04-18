@@ -7,19 +7,21 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { MockHttpInterceptor } from '../../core/interceptors/mock-http.interceptor';
-import { SelectedCityComponent } from './selected-city.component';
-import { SelectedCityRoutingModule } from './selected-city-routing.module';
+import { CityComponent } from './city.component';
+import { CityRoutingModule } from './city-routing.module';
+import { cityForFeature, cityReducer } from '../../shared/store/city/city.reducer';
+import { CityEffects } from '../../shared/store/city/city.effects';
 
 @NgModule({
   declarations: [
-    SelectedCityComponent
+    CityComponent
   ],
   imports: [
     CommonModule,
-    SelectedCityRoutingModule,
-    // StoreModule.forFeature('cityData', CITY_REDUCERS),
-    // StoreDevtoolsModule.instrument(),
-    // EffectsModule.forFeature([CityEffects]),
+    CityRoutingModule,
+    StoreModule.forFeature(cityForFeature, cityReducer),
+    StoreDevtoolsModule.instrument(),
+    EffectsModule.forFeature([CityEffects]),
   ],
   exports: [],
   bootstrap: [],
@@ -31,4 +33,4 @@ import { SelectedCityRoutingModule } from './selected-city-routing.module';
     }
   ],
 })
-export class SelectedCityModule { }
+export class CityModule { }

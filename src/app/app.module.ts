@@ -10,6 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { MockHttpInterceptor } from "./core/interceptors/mock-http.interceptor";
 import { AppRoutingModule } from './app-routing.module';
+import { CityComponent } from './pages/city/city.component';
 
 @NgModule({
   declarations: [

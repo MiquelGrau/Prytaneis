@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CityModule } from './pages/city/city.module';
 
 const routes: Routes = [
   {
@@ -13,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'city/:id',
-    loadChildren: () => import('./pages/selected-city/selected-city.module').then((m) => m.SelectedCityModule),
+    loadChildren: () => import('./pages/city/city.module').then((m) => m.CityModule),
   },
 ];
 

@@ -1,10 +1,8 @@
 {
-  "data": {
-    "id": "00001",
-    "name": "Amsterdam",
-    "region": "Channel",
-    "position": { "x": "52.3702", "y": "4.8952" },
-    "locationType": "Sea",
-    "population": 150000
-  }
+  "id": "00001",
+  "name": "Amsterdam",
+  "region": "Channel",
+  "position": { "x": "52.3702", "y": "4.8952" },
+  "locationType": "Sea",
+  "population": 150000
 }

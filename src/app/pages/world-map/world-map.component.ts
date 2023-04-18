@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { WorldMapState, worldMapForFeature } from '../../shared/store/world-map/world-map.reducer';
 import { Observable } from 'rxjs';
-import { CityModel } from '../../core/models/city.model';
 
-interface AppState extends WorldMapState {
-  [worldMapForFeature]: WorldMapState;
-}
+import { WorldMapState, worldMapForFeature } from '../../shared/store/world-map/world-map.reducer';
+import { CityModel } from '../../core/models/city.model';
 
 @Component({
   selector: 'app-world-map-map',
@@ -19,9 +16,9 @@ export class WorldMapComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<{ [worldMapForFeature]: WorldMapState }>
   ) {
-    this.cities$ = this.store.pipe(select(state => state[worldMapForFeature].cities));
+    this.cities$ = this.store.pipe(select(state => state[worldMapForFeature]?.cities));
   }
 
   ngOnInit(): void {}
