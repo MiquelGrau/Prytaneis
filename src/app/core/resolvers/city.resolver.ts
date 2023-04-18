@@ -2,17 +2,23 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
-import { loadWorldCities } from '../../shared/store/world-map/world-map.actions';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CitiesResolver implements Resolve<any> {
+export class CityResolver implements Resolve<any> {
   constructor (
     private store: Store<any>
   ){}
 
   resolve(route: ActivatedRouteSnapshot): void {
-    this.store.dispatch(loadWorldCities());
+    const id = route.paramMap.get('id');
+    if (id) {
+      // this.store.select(selectCity)
+      //   .pipe(take(1))
+      //   .subscribe(city => {
+      //     this.store.dispatch(loadCity({ id: id }));
+      //   });
+    }
   }
 }

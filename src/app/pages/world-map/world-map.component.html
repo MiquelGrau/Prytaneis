@@ -3,7 +3,7 @@
     <h2 class="name">Cities:</h2>
 <!--    <button (click)="createCity()">Create City</button>-->
     <ul>
-      <li *ngFor="let city of (citiesList$ | async)">
+      <li *ngFor="let city of (cities$ | async)" (click)="loadCity(city.id)">
         <strong>Name:</strong> {{ city.name }}<br>
         <strong>Location:</strong> {{ city.position.y }}, {{ city.position.x }}<br>
         <strong>Type:</strong> {{ city.locationType }}<br>

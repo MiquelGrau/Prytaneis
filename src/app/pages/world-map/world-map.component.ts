@@ -1,36 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { filter, Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+import { WorldMapState, worldMapForFeature } from '../../shared/store/world-map/world-map.reducer';
+import { Observable } from 'rxjs';
 import { CityModel } from '../../core/models/city.model';
-import { CitiesStateT, selectCities, selectLoading } from '../../shared/store/cities/cities.selectors';
-import { map } from 'rxjs/operators';
+
+interface AppState extends WorldMapState {
+  [worldMapForFeature]: WorldMapState;
+}
 
 @Component({
-  selector: 'app-world-map',
+  selector: 'app-world-map-map',
   templateUrl: './world-map.component.html',
   styleUrls: ['./world-map.component.css']
 })
 export class WorldMapComponent implements OnInit {
-  loading$: Observable<boolean> = new Observable<boolean>();
-  citiesList$: Observable<CityModel[]> = new Observable<CityModel[]>();
+  cities$: Observable<CityModel[]>;
 
   constructor(
-    private store: Store<CitiesStateT>
-  ) {}
-
-  ngOnInit(): void {
-    this.loading$ = this.store.select(selectLoading).pipe(
-      map(res => {
-        console.log('loading =', res);
-        return res;
-      })
-    );
-    this.citiesList$ = this.store.select(selectCities).pipe(
-      map(res => {
-        console.log('citiesList =', res);
-        return res;
-      })
-    );
+    private router: Router,
+    private store: Store<AppState>
+  ) {
+    this.cities$ = this.store.pipe(select(state => state[worldMapForFeature].cities));
   }
 
+  ngOnInit(): void {}
+
+  loadCity(id: string): void {
+    this.router.navigate(['/city', id]);
+  }
 }

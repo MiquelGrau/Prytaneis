@@ -6,22 +6,20 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { WorldMapComponent } from './world-map.component';
-import { WorldMapRoutingModule } from './world-map-routing.module';
 import { MockHttpInterceptor } from '../../core/interceptors/mock-http.interceptor';
-import { WorldMapEffects } from '../../shared/store/world-map/world-map.effects';
-import { worldMapForFeature, worldMapReducer } from '../../shared/store/world-map/world-map.reducer';
+import { SelectedCityComponent } from './selected-city.component';
+import { SelectedCityRoutingModule } from './selected-city-routing.module';
 
 @NgModule({
   declarations: [
-    WorldMapComponent
+    SelectedCityComponent
   ],
   imports: [
     CommonModule,
-    WorldMapRoutingModule,
-    StoreModule.forFeature(worldMapForFeature, worldMapReducer),
-    StoreDevtoolsModule.instrument(),
-    EffectsModule.forFeature([WorldMapEffects]),
+    SelectedCityRoutingModule,
+    // StoreModule.forFeature('cityData', CITY_REDUCERS),
+    // StoreDevtoolsModule.instrument(),
+    // EffectsModule.forFeature([CityEffects]),
   ],
   exports: [],
   bootstrap: [],
@@ -33,4 +31,4 @@ import { worldMapForFeature, worldMapReducer } from '../../shared/store/world-ma
     }
   ],
 })
-export class WorldMapModule { }
+export class SelectedCityModule { }

@@ -3,7 +3,7 @@ import {CoordsModel} from "./coords.model";
 import { LocationType } from "../enums/location.type";
 import { ulid } from 'ulid'
 
-export class CurrentCityModel {
+export class CurrentVehicleCityModel {
   id: string;
   name: string;
 
@@ -16,23 +16,30 @@ export class CurrentCityModel {
 export class CityModel {
   id: string;
   name: string;
+  region: string;
   position: CoordsModel; // Tuple representing the coordinates of the cities
   locationType: LocationType; // Possible values: "land", "sea", "both"
   vehicles: VehicleModel[];
+  population: number;
 
-  constructor(name: string, coordinates: CoordsModel, locationType: LocationType) {
+  constructor(name: string, region: string, coordinates: CoordsModel,
+              locationType: LocationType, population: number) {
     this.id = ulid();
     this.name = name;
+    this.region = region;
     this.position = coordinates;
     this.locationType = locationType;
     this.vehicles = [];
+    this.population = population;
   }
 
   static fromJson(json: any): CityModel {
     const name = json.name;
+    const region = json.region;
     const position = new CoordsModel(json.position.x, json.position.y);
     const locationType = json.locationType;
-    const city = new CityModel(name, position, locationType);
+    const population = json.population;
+    const city = new CityModel(name, region, position, locationType, population);
 
     if (json.vehicles && json.vehicles.length > 0) {
       json.vehicles.forEach((vehicleJson: any) => {

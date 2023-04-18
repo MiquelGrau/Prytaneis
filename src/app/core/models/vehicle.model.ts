@@ -1,6 +1,6 @@
 import { CoordsModel } from "./coords.model";
 import { LocationType } from "../enums/location.type";
-import { CurrentCityModel } from "./city.model";
+import { CurrentVehicleCityModel } from "./city.model";
 import {ulid} from "ulid";
 
 export abstract class VehicleModel {
@@ -8,7 +8,7 @@ export abstract class VehicleModel {
   name: string;
   position: CoordsModel; // Tuple representing the coordinates of the vehicle
   movementRestrictions: LocationType;
-  currentCity: CurrentCityModel | null;
+  currentCity: CurrentVehicleCityModel | null;
 
   constructor(name: string, position: CoordsModel, movementRestrictions: LocationType) {
     this.id = ulid();
