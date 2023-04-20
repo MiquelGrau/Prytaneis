@@ -1,7 +1,8 @@
+import { ulid } from 'ulid';
 import { VehicleModel } from "./vehicle.model";
-import {CoordsModel} from "./coords.model";
+import { CoordsModel } from "./coords.model";
+import { buildingFactory, BuildingModel } from './building.model';
 import { LocationType } from "../enums/location.type";
-import { ulid } from 'ulid'
 
 export class CurrentVehicleCityModel {
   id: string;
@@ -15,50 +16,51 @@ export class CurrentVehicleCityModel {
 
 export class CityModel {
   id: string;
+  buildings: BuildingModel[];
+  locationType: LocationType; // Possible values: "land", "sea", "both"
   name: string;
   region: string;
-  position: CoordsModel; // Tuple representing the coordinates of the cities
-  locationType: LocationType; // Possible values: "land", "sea", "both"
-  vehicles: VehicleModel[];
   population: number;
+  position: CoordsModel; // Tuple representing the coordinates of the cities
+  vehicles: VehicleModel[];
 
-  constructor(name: string, region: string, coordinates: CoordsModel,
-              locationType: LocationType, population: number) {
-    this.id = ulid();
+  constructor(id: string, name: string, region: string, coordinates: CoordsModel,
+              locationType: LocationType, population: number, vehicles: VehicleModel[],
+              buildings: BuildingModel[]) {
+    this.id = id ? id : ulid();
+    this.locationType = locationType;
     this.name = name;
     this.region = region;
-    this.position = coordinates;
-    this.locationType = locationType;
-    this.vehicles = [];
     this.population = population;
+    this.position = coordinates;
+    this.vehicles = vehicles;
+    this.buildings = buildings;
   }
 
   static fromJson(json: any): CityModel {
+    debugger
+    const id = json.id;
     const name = json.name;
     const region = json.region;
-    const position = new CoordsModel(json.position.x, json.position.y);
     const locationType = json.locationType;
     const population = json.population;
-    const city = new CityModel(name, region, position, locationType, population);
+    const position = new CoordsModel(json.position.x, json.position.y);
 
+    const vehicles: VehicleModel[] = [];
     if (json.vehicles && json.vehicles.length > 0) {
       json.vehicles.forEach((vehicleJson: any) => {
         const vehicle = VehicleModel.fromJson(vehicleJson);
-        city.addVehicle(vehicle);
+        vehicles.push(vehicle);
       });
     }
 
-    return city;
-  }
-
-  addVehicle(vehicle: VehicleModel): void {
-    this.vehicles.push(vehicle);
-  }
-
-  removeVehicle(vehicle: VehicleModel): void {
-    const index = this.vehicles.indexOf(vehicle);
-    if (index !== -1) {
-      this.vehicles.splice(index, 1);
+    const buildings: BuildingModel[] = [];
+    if (json.buildings && json.buildings.length > 0) {
+      json.buildings.forEach((buildingJson: any) => {
+        const building = buildingFactory(buildingJson);
+        buildings.push(building);
+      });
     }
+    return new CityModel(id, name, region, position, locationType, population, vehicles, buildings);
   }
 }

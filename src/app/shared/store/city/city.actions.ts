@@ -10,3 +10,8 @@ export const loadedCity = createAction(
   '[City] Loaded City',
   props<{ city: CityModel }>()
 );
+
+export const loadCityError = createAction(
+  '[City] Load City Error',
+  props<{ error: any }>()
+);

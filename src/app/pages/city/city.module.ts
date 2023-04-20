@@ -11,10 +11,14 @@ import { CityComponent } from './city.component';
 import { CityRoutingModule } from './city-routing.module';
 import { cityForFeature, cityReducer } from '../../shared/store/city/city.reducer';
 import { CityEffects } from '../../shared/store/city/city.effects';
+import { WarehouseComponent } from './components/warehouse/warehouse.component';
+import { MarketComponent } from './components/market/market.component';
 
 @NgModule({
   declarations: [
-    CityComponent
+    CityComponent,
+    WarehouseComponent,
+    MarketComponent
   ],
   imports: [
     CommonModule,

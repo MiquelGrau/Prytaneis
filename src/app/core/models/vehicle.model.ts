@@ -9,6 +9,7 @@ export abstract class VehicleModel {
   position: CoordsModel; // Tuple representing the coordinates of the vehicle
   movementRestrictions: LocationType;
   currentCity: CurrentVehicleCityModel | null;
+  type: string;
 
   constructor(name: string, position: CoordsModel, movementRestrictions: LocationType) {
     this.id = ulid();
@@ -16,6 +17,7 @@ export abstract class VehicleModel {
     this.position = position;
     this.movementRestrictions = movementRestrictions;
     this.currentCity = null;
+    this.type = '';
   }
 
   abstract canMove(locationType: LocationType): boolean;

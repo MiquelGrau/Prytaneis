@@ -1,8 +1,55 @@
 {
-  "id": "00001",
+  "id": "C00001",
+  "locationType": "Sea",
   "name": "Amsterdam",
   "region": "Channel",
+  "population": 150000,
   "position": { "x": "52.3702", "y": "4.8952" },
-  "locationType": "Sea",
-  "population": 150000
+  "vehicles": [],
+  "buildings": [
+    {
+      "id": "B00001",
+      "address": "C/ bla bla 012 A2",
+      "name": "Magatzem municipal",
+      "owner": {
+        "id": "M00001",
+        "name": "Municipal"
+      },
+      "goods": {
+        "food": 5,
+        "wood": 5,
+        "iron": 5,
+        "tools": 5,
+        "clothes": 5
+      },
+      "type": "Warehouse"
+    },
+    {
+      "id": "B00003",
+      "address": "C/ bla bla 012 A2",
+      "name": "Mercat municipal",
+      "owner": {
+        "id": "M00001",
+        "name": "Municipal"
+      },
+      "type": "Market"
+    },
+    {
+      "id": "B00005",
+      "address": "C/ bla bla 012 A2",
+      "name": "Magatzem Privat",
+      "owner": {
+        "id": "P00001",
+        "name": "Pepito"
+      },
+      "goods": {
+        "food": 5,
+        "wood": 5,
+        "iron": 5,
+        "tools": 5,
+        "clothes": 5
+      },
+      "type": "Warehouse"
+    }
+  ]
 }

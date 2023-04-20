@@ -1,35 +1,60 @@
-import {ulid} from "ulid";
+import { ulid } from 'ulid';
+import { BuildingType } from '../enums/building.type';
+import { OwnerModel } from './owner.model';
 
-export class BuildingModel {
+export abstract class BuildingModel {
   id: string;
   name: string;
+  owner: OwnerModel;
+  type: BuildingType;
   address: string;
 
-  constructor(name: string, address: string) {
-    this.id = ulid();
+  constructor(id: string, name: string, owner: OwnerModel, type: BuildingType, address: string) {
+    this.id = id ? id : ulid();
     this.name = name;
+    this.owner = owner;
+    this.type = type;
     this.address = address;
   }
 }
 
-export class MarketModel extends BuildingModel {
-  // Market-specific properties and methods
-}
+export class WarehouseModel extends BuildingModel {
+  capacity: number;
 
-export class FactoryModel extends BuildingModel {
-  // Factory-specific properties and methods
-  weeklyProduction: number;
+  constructor(id: string, name: string, owner: OwnerModel, address: string, capacity: number) {
+    super(id, name, owner, BuildingType.Warehouse, address);
+    this.capacity = capacity;
+  }
 
-  constructor(name: string, address: string) {
-    super(name, address);
-    this.weeklyProduction = 2; // 2 tones of iron per week
+  static fromJson(json: any): WarehouseModel {
+    return new WarehouseModel(json.id, json.name, json.owner, json.address, json.capacity);
   }
 }
 
-export class TavernModel extends BuildingModel {
-  // Tavern-specific properties and methods
+export class MarketModel extends BuildingModel {
+  transactionFee: number;
+
+  constructor(id: string, name: string, owner: OwnerModel, address: string, transactionFee: number) {
+    super(id, name, owner, BuildingType.Market, address);
+    this.transactionFee = transactionFee;
+  }
+
+  static fromJson(json: any): MarketModel {
+    return new MarketModel(json.id, json.name, json.owner, json.address, json.transactionFee);
+  }
 }
 
-export class HouseModel extends BuildingModel {
-  // House-specific properties and methods
+const buildingConstructorMap: { [type in BuildingType]?: (json: any) => BuildingModel } = {
+  [BuildingType.Warehouse]: WarehouseModel.fromJson,
+  [BuildingType.Market]: MarketModel.fromJson,
+  // Add other building types and their constructors here
+};
+
+export function buildingFactory(json: any): BuildingModel {
+  const constructorFn = buildingConstructorMap[json.type as BuildingType];
+  if (constructorFn) {
+    return constructorFn(json);
+  } else {
+    throw new Error(`Unknown building type: ${json.type}`);
+  }
 }
