@@ -14,3 +14,4 @@ export class WarehouseComponent implements OnInit {
     this.warehouse = this.building as WarehouseModel;
   }
 }
+

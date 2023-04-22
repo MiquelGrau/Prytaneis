@@ -1,28 +1,36 @@
 <div class="container" *ngIf="city$ | async as city">
-  <h1 class="mt-4">{{ city.name }}</h1>
+  <h1 class="pt-4">{{ city.name }}</h1>
   <p class="lead">{{ city.region }}</p>
   <p><strong>Population:</strong> {{ city.population }}</p>
   <p><strong>Location type:</strong> {{ city.locationType }}</p>
   <p><strong>Coordinates:</strong> ({{ city.position.x }}, {{ city.position.y }})</p>
 
   <h2 class="mt-5">Buildings</h2>
-  <div class="card-deck">
+  <div class="card-deck m-0">
     <div class="card mb-4" *ngFor="let building of city.buildings">
-      <div class="card-body">
+      <div class="card-body" (click)="selectedBuildingId = building.id">
         <h5 class="card-title">{{ building.name }}</h5>
         <p class="card-text">
-          <strong>Owner:</strong> {{ building.owner }}<br />
+          <strong>Owner:</strong> {{ building.owner.name }}<br />
           <strong>Type:</strong> {{ building.type }}<br />
           <strong>Address:</strong> {{ building.address }}<br />
-          <ng-container [ngSwitch]="building.type">
-            <app-warehouse *ngSwitchCase="'warehouse'" [building]="building"></app-warehouse>
-            <app-market *ngSwitchCase="'market'" [building]="building"></app-market>
-            <!-- Add other cases for other building types here -->
-          </ng-container>
         </p>
       </div>
     </div>
   </div>
+
+  <ng-container *ngFor="let building of city.buildings">
+    <div class="card mb-4" *ngIf="selectedBuildingId === building.id">
+      <h5 class="card-title m-0 p-3">{{ building.name }}</h5>
+      <div class="card-body">
+        <ng-container [ngSwitch]="building.type">
+          <app-warehouse *ngSwitchCase="'Warehouse'" [building]="building"></app-warehouse>
+          <app-market *ngSwitchCase="'Market'" [building]="building"></app-market>
+          <!-- Add other cases for other building types here -->
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
 
   <h2 class="mt-5">Vehicles</h2>
   <table class="table">

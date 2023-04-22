@@ -1,1 +1,9 @@
-<p>warehouse works!</p>
+<div *ngIf="warehouse" class="row mt-2">
+  <div class="col-12" *ngFor="let good of warehouse.inventory.getGoodsArray()">
+    <div class="mb-3">
+      <div class="card-header text-uppercase">
+        <strong>{{ good.key }}:</strong> {{ good.value }}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { ulid } from 'ulid';
 import { BuildingType } from '../enums/building.type';
 import { OwnerModel } from './owner.model';
+import { InventoryModel } from './inventory.model';
 
 export abstract class BuildingModel {
   id: string;
@@ -20,16 +21,21 @@ export abstract class BuildingModel {
 
 export class WarehouseModel extends BuildingModel {
   capacity: number;
+  inventory: InventoryModel;
 
-  constructor(id: string, name: string, owner: OwnerModel, address: string, capacity: number) {
+  constructor(id: string, name: string, owner: OwnerModel, address: string, capacity: number, inventory: InventoryModel) {
     super(id, name, owner, BuildingType.Warehouse, address);
     this.capacity = capacity;
+    this.inventory = inventory;
   }
 
   static fromJson(json: any): WarehouseModel {
-    return new WarehouseModel(json.id, json.name, json.owner, json.address, json.capacity);
+    const inventory = InventoryModel.fromJson(json.inventory?.goods ? json.inventory.goods : {});
+    return new WarehouseModel(json.id, json.name, json.owner, json.address, json.capacity, inventory);
   }
+
 }
+
 
 export class MarketModel extends BuildingModel {
   transactionFee: number;

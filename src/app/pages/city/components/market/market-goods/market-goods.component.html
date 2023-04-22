@@ -1,0 +1,22 @@
+<!-- market-goods.component.html -->
+<div *ngIf="loadingGoods">Loading goods...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<form *ngIf="!loadingGoods && !error" (ngSubmit)="onPurchase()" #purchaseForm="ngForm">
+  <div *ngFor="let good of goods | goodsArray">
+    <label class="col-4">{{ good.key }}: {{ good.value }}</label>
+    <input type="number" [(ngModel)]="selectedGoods[good.key]"
+           name="{{good.key}}" min="0" max="{{good.value}}"
+           required [maxGoods]="good.value" #goodQuantity="ngModel"
+           (blur)="resetToZero(good.key, goodQuantity)">
+    <div *ngIf="goodQuantity.errors && $any(goodQuantity.errors)['maxGoods']">
+      You can't purchase more than {{ good.value }} units of {{ good.key }}.
+    </div>
+  </div>
+  <button type="submit" [disabled]="purchaseForm.invalid">Purchase</button>
+</form>
+
+<div *ngIf="purchaseStatus === 'loading'">Processing purchase...</div>
+<div *ngIf="purchaseStatus === 'success'">Purchase successful!</div>
+<div *ngIf="purchaseStatus === 'error'">Error occurred during purchase. Please try again.</div>
+

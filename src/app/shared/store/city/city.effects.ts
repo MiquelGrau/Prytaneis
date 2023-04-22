@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { loadCity, loadCityError, loadedCity } from './city.actions';
+import {
+  loadCity,
+  loadCityError,
+  loadedCity,
+} from './city.actions';
 import { CityService } from '../../../core/services/city.service';
 import { CityModel } from '../../../core/models/city.model';
 

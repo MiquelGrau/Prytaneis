@@ -9,18 +9,20 @@
   "buildings": [
     {
       "id": "B00001",
-      "address": "C/ bla bla 012 A2",
-      "name": "Magatzem municipal",
+      "address": "C/ bla bla 012",
+      "name": "Magatzem Municipal",
       "owner": {
         "id": "M00001",
-        "name": "Municipal"
+        "name": "Town Hall"
       },
-      "goods": {
-        "food": 5,
-        "wood": 5,
-        "iron": 5,
-        "tools": 5,
-        "clothes": 5
+      "inventory": {
+        "goods": {
+          "food": 5,
+          "wood": 5,
+          "iron": 5,
+          "tools": 5,
+          "clothes": 5
+        }
       },
       "type": "Warehouse"
     },
@@ -36,18 +38,20 @@
     },
     {
       "id": "B00005",
-      "address": "C/ bla bla 012 A2",
+      "address": "C/ bla bla 014",
       "name": "Magatzem Privat",
       "owner": {
         "id": "P00001",
         "name": "Pepito"
       },
-      "goods": {
-        "food": 5,
-        "wood": 5,
-        "iron": 5,
-        "tools": 5,
-        "clothes": 5
+      "inventory": {
+        "goods": {
+          "food": 8,
+          "wood": 8,
+          "iron": 8,
+          "tools": 8,
+          "clothes": 8
+        }
       },
       "type": "Warehouse"
     }

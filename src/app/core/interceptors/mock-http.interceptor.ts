@@ -4,20 +4,27 @@ import {Observable, of } from 'rxjs';
 import * as vehiclesMock from '../../../assets/mock-data/vehicles.mock.json';
 import * as citiesMock from '../../../assets/mock-data/cities.mock.json';
 import * as cityMock from '../../../assets/mock-data/city.mock.json';
+import * as marketMock from '../../../assets/mock-data/market.mock.json';
 import { environment } from 'src/environments/environment';
+
+const apiUrl = environment.api_url;
 
 const urls = [
   {
-    url: environment.api_url + '/vehicles',
+    url: `${apiUrl}/vehicles`,
     json: vehiclesMock
   },
   {
-    url: environment.api_url + '/cities',
+    url: `${apiUrl}/cities`,
     json: citiesMock
   },
   {
-    url: environment.api_url + '/city',
+    url: `${apiUrl}/city`,
     json: cityMock
+  },
+  {
+    url: `${apiUrl}/market`,
+    json: marketMock
   },
 ]
 

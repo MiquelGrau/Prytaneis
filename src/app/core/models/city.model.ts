@@ -38,7 +38,6 @@ export class CityModel {
   }
 
   static fromJson(json: any): CityModel {
-    debugger
     const id = json.id;
     const name = json.name;
     const region = json.region;

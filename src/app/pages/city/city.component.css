@@ -1,0 +1,14 @@
+.container {
+  max-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  background-color: darkgray;
+}
+
+.card-body {
+  background-color: #d6d6d6;
+}
+
+.card-title {
+  background-color: #d6d6d6;
+}
