@@ -36,6 +36,7 @@ export class GoodsModel {
   }
 
   static fromJson(json: any): GoodsModel {
+    console.log(json);
     return new GoodsModel(json.food, json.wood, json.iron, json.tools, json.clothes);
   }
 

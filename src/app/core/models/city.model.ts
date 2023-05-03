@@ -38,12 +38,13 @@ export class CityModel {
   }
 
   static fromJson(json: any): CityModel {
+    console.log(json);
     const id = json.id;
     const name = json.name;
     const region = json.region;
     const locationType = json.locationType;
     const population = json.population;
-    const position = new CoordsModel(json.position.x, json.position.y);
+    const position = new CoordsModel(json.positionX, json.positionY);
 
     const vehicles: VehicleModel[] = [];
     if (json.vehicles && json.vehicles.length > 0) {
@@ -60,6 +61,7 @@ export class CityModel {
         buildings.push(building);
       });
     }
+
     return new CityModel(id, name, region, position, locationType, population, vehicles, buildings);
   }
 }

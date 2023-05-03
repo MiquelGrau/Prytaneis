@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { take } from 'rxjs';
-import { loadWorldCities } from '../../shared/store/world-map/world-map.actions';
 import { loadCity } from '../../shared/store/city/city.actions';
 
 @Injectable({

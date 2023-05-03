@@ -10,20 +10,20 @@ import { environment } from 'src/environments/environment';
 const apiUrl = environment.api_url;
 
 const urls = [
+  // {
+  //   url: `${apiUrl}/vehicles`,
+  //   json: vehiclesMock
+  // },
+  // {
+  //   url: `${apiUrl}/cities`,
+  //   json: citiesMock
+  // },
+  // {
+  //   url: `${apiUrl}/city`,
+  //   json: cityMock
+  // },
   {
-    url: `${apiUrl}/vehicles`,
-    json: vehiclesMock
-  },
-  {
-    url: `${apiUrl}/cities`,
-    json: citiesMock
-  },
-  {
-    url: `${apiUrl}/city`,
-    json: cityMock
-  },
-  {
-    url: `${apiUrl}/market`,
+    url: `${apiUrl}/aaaaaaaaaaa`,
     json: marketMock
   },
 ]
