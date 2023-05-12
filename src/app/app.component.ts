@@ -1,41 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  title = 'Your App Title';
 
-  constructor() {}
+  constructor(public auth: AuthService, private http: HttpClient) {}
 
-  ngOnInit() {
-    // this.vehicleService.getVehicles().subscribe((res: any) => {
-    //   this.vehicles = res.data.map((vehicle: any) => VehicleModel.fromJson(vehicle));
-    // });
+  ngOnInit(): void {
+    this.auth.user$.subscribe((user) => {
+      if (user) {
+        const userId = user.sub;
+        this.http.post(`${environment.api_url}/register-user`, { userId })
+          .pipe(tap((response) => console.log('User registered in the database', response)))
+          .subscribe();
+      }
+    });
   }
-
-  // createCity(): void {
-  //   const name = prompt("Enter the name of the new cities:");
-  //   if (name && name.trim() !== "") {
-  //     const position = CoordsModel.getRandomCoords();
-  //     const locationType = LocationType.Sea;
-  //     const city = new CityModel(name, position, locationType);
-  //     this.cities.push(city);
-  //     return;
-  //   }
-  //   alert("Enter a valid name");
-  // }
-
-  // createShip() {
-  //   const name = prompt("Enter name for the new ship:");
-  //   if (name && name.trim() !== "") {
-  //     const position = CoordsModel.getRandomCoords();
-  //     const newShip = new ShipModel(name, position);
-  //     this.vehicles.push(newShip);
-  //     return;
-  //   }
-  //   alert("Enter a valid name");
-  // }
-
 }

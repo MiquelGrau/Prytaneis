@@ -10,11 +10,14 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { MockHttpInterceptor } from "./core/interceptors/mock-http.interceptor";
 import { AppRoutingModule } from './app-routing.module';
-import { CityComponent } from './pages/city/city.component';
+import { AuthModule } from '@auth0/auth0-angular';
+import { SignInComponent } from './pages/sign-in/sign-in.component';
+import { CustomAuthInterceptor } from './core/interceptors/custom-auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SignInComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,8 +27,23 @@ import { CityComponent } from './pages/city/city.component';
     StoreModule.forRoot({}, {}),
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([]),
+    AuthModule.forRoot({
+      domain: 'dev-86wwefgk7d4nuz4f.eu.auth0.com',
+      clientId: 'eoVHN30Bgm19V7uBDPPz4hUf8Wc2SqY6',
+      authorizationParams: {
+        audience: 'https://dev-86wwefgk7d4nuz4f.eu.auth0.com/api/v2/',
+        redirect_uri: window.location.origin,
+        scope: 'openid profile email',
+      }
+    }),
+
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomAuthInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MockHttpInterceptor,

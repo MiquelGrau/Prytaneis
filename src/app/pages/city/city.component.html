@@ -1,28 +1,26 @@
-<div class="container" *ngIf="city$ | async as city">
-  <h1 class="pt-4">{{ city.name }}</h1>
-  <p class="lead">{{ city.region }}</p>
+<div class="container mx-auto px-4" *ngIf="city$ | async as city">
+  <h1 class="pt-4 text-3xl font-semibold">{{ city.name }}</h1>
+  <p class="text-lg">{{ city.region }}</p>
   <p><strong>Population:</strong> {{ city.population }}</p>
   <p><strong>Location type:</strong> {{ city.locationType }}</p>
   <p><strong>Coordinates:</strong> ({{ city.position.x }}, {{ city.position.y }})</p>
 
-  <h2 class="mt-5">Buildings</h2>
-  <div class="card-deck m-0">
-    <div class="card mb-4" *ngFor="let building of city.buildings">
-      <div class="card-body" (click)="selectedBuildingId = building.id">
-        <h5 class="card-title">{{ building.name }}</h5>
-        <p class="card-text">
-          <strong>Owner:</strong> {{ building.owner.name }}<br />
-          <strong>Type:</strong> {{ building.type }}<br />
-          <strong>Address:</strong> {{ building.address }}<br />
-        </p>
-      </div>
+  <h2 class="mt-10 text-2xl font-semibold">Buildings</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="bg-white rounded-lg shadow-md p-4 mb-4 cursor-pointer" *ngFor="let building of city.buildings" (click)="selectedBuildingId = building.id">
+      <h5 class="text-xl font-semibold">{{ building.name }}</h5>
+      <p class="text-base">
+        <strong>Owner:</strong> {{ building.owner.name }}<br />
+        <strong>Type:</strong> {{ building.type }}<br />
+        <strong>Address:</strong> {{ building.address }}<br />
+      </p>
     </div>
   </div>
 
   <ng-container *ngFor="let building of city.buildings">
-    <div class="card mb-4" *ngIf="selectedBuildingId === building.id">
-      <h5 class="card-title m-0 p-3">{{ building.name }}</h5>
-      <div class="card-body">
+    <div class="bg-white rounded-lg shadow-md p-4 mb-4" *ngIf="selectedBuildingId === building.id">
+      <h5 class="text-xl font-semibold m-0">{{ building.name }}</h5>
+      <div class="p-4">
         <ng-container [ngSwitch]="building.type">
           <app-warehouse *ngSwitchCase="'Warehouse'" [building]="building"></app-warehouse>
           <app-market *ngSwitchCase="'Market'" [building]="building"></app-market>
@@ -32,21 +30,21 @@
     </div>
   </ng-container>
 
-  <h2 class="mt-5">Vehicles</h2>
-  <table class="table">
+  <h2 class="mt-10 text-2xl font-semibold">Vehicles</h2>
+  <table class="min-w-full table-auto">
     <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Name</th>
-      <th scope="col">Type</th>
+    <tr class="border-b">
+      <th scope="col" class="px-4 py-2 text-left">ID</th>
+      <th scope="col" class="px-4 py-2 text-left">Name</th>
+      <th scope="col" class="px-4 py-2 text-left">Type</th>
       <!-- Add more columns as needed -->
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let vehicle of city.vehicles">
-      <td>{{ vehicle.id }}</td>
-      <td>{{ vehicle.name }}</td>
-      <td>{{ vehicle.type }}</td>
+    <tr *ngFor="let vehicle of city.vehicles" class="border-b">
+      <td class="px-4 py-2">{{ vehicle.id }}</td>
+      <td class="px-4 py-2">{{ vehicle.name }}</td>
+      <td class="px-4 py-2">{{ vehicle.type }}</td>
       <!-- Add more cells as needed -->
     </tr>
     </tbody>
