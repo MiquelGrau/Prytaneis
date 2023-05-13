@@ -8,6 +8,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/lobby',
+    pathMatch: 'full',
   },
   {
     path: 'sign-in',
@@ -28,11 +29,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/city/city.module').then((m) => m.CityModule),
     canActivate: [AuthGuard],
   },
-  {
-    path: '**',
-    redirectTo: '/lobby',
-  },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

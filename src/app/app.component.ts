@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     this.auth.user$.subscribe((user) => {
       if (user) {
         const userId = user.sub;
-        this.http.post(`${environment.api_url}/register-user`, { userId })
+        this.http.post(`${environment.api_url}/users/register`, { userId })
           .pipe(tap((response) => console.log('User registered in the database', response)))
           .subscribe();
       }

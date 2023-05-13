@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UserModel } from '../../core/models/user.model';
+import { GameModel } from '../../core/models/game.model';
 
 @Component({
   selector: 'app-lobby',
@@ -6,5 +8,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./lobby.component.css']
 })
 export class LobbyComponent {
-
 }
