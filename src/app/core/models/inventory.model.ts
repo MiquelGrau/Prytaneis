@@ -1,10 +1,5 @@
-
 export class InventoryModel {
-  goods: GoodsModel;
-
-  constructor(goods?: GoodsModel) {
-    this.goods = goods || new GoodsModel();
-  }
+  constructor(public goods: GoodsModel = new GoodsModel()) {}
 
   static fromJson(json: any): InventoryModel {
     const goods = GoodsModel.fromJson(json);
@@ -12,7 +7,7 @@ export class InventoryModel {
   }
 
   getGoodsArray(): { key: string; value: number }[] {
-    return Object.entries(this.goods).map(([key, value]) => ({ key, value }));
+    return this.goods.getGoodsArray();
   }
 
   subtract(goods: GoodsModel): InventoryModel {
@@ -21,23 +16,16 @@ export class InventoryModel {
 }
 
 export class GoodsModel {
-  food: number;
-  wood: number;
-  iron: number;
-  tools: number;
-  clothes: number;
-
-  constructor(food?: number, wood?: number, iron?: number, tools?: number, clothes?: number) {
-    this.food = food || 0;
-    this.wood = wood || 0;
-    this.iron = iron || 0;
-    this.tools = tools || 0;
-    this.clothes = clothes || 0;
-  }
+  constructor(
+    public food: number = 0,
+    public wood: number = 0,
+    public iron: number = 0,
+    public tools: number = 0,
+    public clothes: number = 0
+  ) {}
 
   static fromJson(json: any): GoodsModel {
-    console.log(json);
-    return new GoodsModel(json.food, json.wood, json.iron, json.tools, json.clothes);
+    return new GoodsModel(json.food || 0, json.wood || 0, json.iron || 0, json.tools || 0, json.clothes || 0);
   }
 
   getGoodsArray(): { key: string; value: number }[] {

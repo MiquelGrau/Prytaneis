@@ -1,17 +1,14 @@
 import { ulid } from 'ulid';
 
 export class OwnerModel {
-  id: string;
-  name: string;
-
-  constructor(id: string, name: string) {
-    this.id = id ? id : ulid();
-    this.name = name;
-  }
+  constructor(
+    public id: string = ulid(),
+    public name: string
+  ) {}
 
   static fromJson(json: any): OwnerModel {
-    const id = json.id;
-    const name = json.name;
+    const id = json?.id || ulid();
+    const name = json?.name || '';
 
     return new OwnerModel(id, name);
   }

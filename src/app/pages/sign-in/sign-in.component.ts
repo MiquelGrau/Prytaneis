@@ -11,7 +11,7 @@ export class SignInComponent {
 
   login(): void {
     this.auth.loginWithRedirect({
-      appState: { target: '/world' },
+      appState: { target: '/lobby' },
     });
   }
 }

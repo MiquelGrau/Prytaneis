@@ -1,14 +1,11 @@
-
 export class CoordsModel {
-  x: number;
-  y: number;
+  constructor(public x: number, public y: number) {}
 
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+  static fromJson(json: any): CoordsModel {
+    return new CoordsModel(json.x, json.y);
   }
 
-  static getRandomCoords() {
+  static getRandomCoords(): CoordsModel {
     const x = parseFloat((Math.random() * 180 - 90).toFixed(4));
     const y = parseFloat((Math.random() * 360 - 180).toFixed(4));
     return new CoordsModel(x, y);
@@ -35,7 +32,7 @@ export class CoordsModel {
     return distance;
   }
 
-   private static deg2rad(deg: number): number {
+  private static deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
 }

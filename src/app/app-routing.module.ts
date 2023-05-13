@@ -2,16 +2,21 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { LobbyComponent } from './pages/lobby/lobby.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/world',
-    pathMatch: 'full',
+    redirectTo: '/lobby',
   },
   {
     path: 'sign-in',
     component: SignInComponent,
+  },
+  {
+    path: 'lobby',
+    component: LobbyComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'world',
@@ -25,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/sign-in',
+    redirectTo: '/lobby',
   },
 ];
 

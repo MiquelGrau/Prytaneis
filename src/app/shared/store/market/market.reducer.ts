@@ -58,11 +58,11 @@ export const marketReducer = createReducer(
     }
 
     const currentGoods = new GoodsModel(
-      state.goods.food,
-      state.goods.wood,
-      state.goods.iron,
-      state.goods.tools,
-      state.goods.clothes
+      state.goods?.food ?? 0,
+      state.goods?.wood ?? 0,
+      state.goods?.iron ?? 0,
+      state.goods?.tools ?? 0,
+      state.goods?.clothes ?? 0
     );
 
     const updatedGoods = currentGoods.subtract(goods);

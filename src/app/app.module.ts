@@ -13,11 +13,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from '@auth0/auth0-angular';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { CustomAuthInterceptor } from './core/interceptors/custom-auth.interceptor';
+import { LobbyComponent } from './pages/lobby/lobby.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
+    LobbyComponent,
   ],
   imports: [
     BrowserModule,

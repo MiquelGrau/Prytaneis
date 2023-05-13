@@ -4,29 +4,25 @@ import { OwnerModel } from './owner.model';
 import { InventoryModel } from './inventory.model';
 
 export abstract class BuildingModel {
-  id: string;
-  name: string;
-  owner: OwnerModel;
-  type: BuildingType;
-  address: string;
-
-  constructor(id: string, name: string, owner: OwnerModel, type: BuildingType, address: string) {
-    this.id = id ? id : ulid();
-    this.name = name;
-    this.owner = owner;
-    this.type = type;
-    this.address = address;
-  }
+  constructor(
+    public id: string = ulid(),
+    public name: string,
+    public owner: OwnerModel,
+    public type: BuildingType,
+    public address: string
+  ) {}
 }
 
 export class WarehouseModel extends BuildingModel {
-  capacity: number;
-  inventory: InventoryModel;
-
-  constructor(id: string, name: string, owner: OwnerModel, address: string, capacity: number, inventory: InventoryModel) {
+  constructor(
+    id: string,
+    name: string,
+    owner: OwnerModel,
+    address: string,
+    public capacity: number,
+    public inventory: InventoryModel
+  ) {
     super(id, name, owner, BuildingType.Warehouse, address);
-    this.capacity = capacity;
-    this.inventory = inventory;
   }
 
   static fromJson(json: any): WarehouseModel {
@@ -36,13 +32,15 @@ export class WarehouseModel extends BuildingModel {
 
 }
 
-
 export class MarketModel extends BuildingModel {
-  transactionFee: number;
-
-  constructor(id: string, name: string, owner: OwnerModel, address: string, transactionFee: number) {
+  constructor(
+    id: string,
+    name: string,
+    owner: OwnerModel,
+    address: string,
+    public transactionFee: number
+  ) {
     super(id, name, owner, BuildingType.Market, address);
-    this.transactionFee = transactionFee;
   }
 
   static fromJson(json: any): MarketModel {

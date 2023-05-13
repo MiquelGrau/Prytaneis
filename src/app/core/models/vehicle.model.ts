@@ -1,44 +1,35 @@
 import { CoordsModel } from "./coords.model";
 import { LocationType } from "../enums/location.type";
 import { CurrentVehicleCityModel } from "./city.model";
-import {ulid} from "ulid";
 
 export abstract class VehicleModel {
-  id: string;
-  name: string;
-  position: CoordsModel; // Tuple representing the coordinates of the vehicle
-  movementRestrictions: LocationType;
-  currentCity: CurrentVehicleCityModel | null;
-  type: string;
-
-  constructor(name: string, position: CoordsModel, movementRestrictions: LocationType) {
-    this.id = ulid();
-    this.name = name;
-    this.position = position;
-    this.movementRestrictions = movementRestrictions;
-    this.currentCity = null;
-    this.type = '';
-  }
+  constructor(
+    public id: string,
+    public name: string,
+    public position: CoordsModel,
+    public movementRestrictions: LocationType,
+    public currentCity: CurrentVehicleCityModel | null,
+    public type: string
+  ) {}
 
   abstract canMove(locationType: LocationType): boolean;
 
   static fromJson(json: any): VehicleModel {
-    const name = json.name;
-    const position = new CoordsModel(json.position.x, json.position.y);
+    const position = CoordsModel.fromJson(json.position);
+    const currentCity = json.currentCity ? CurrentVehicleCityModel.fromJson(json.currentCity) : null;
     if (json.movementRestrictions === LocationType.Sea) {
-      return new ShipModel(name, position);
+      return new ShipModel(json.id, json.name, position, json.movementRestrictions, currentCity, json.type);
     }
     if (json.movementRestrictions === LocationType.Land) {
-      return new CaravanModel(name, position);
+      return new CaravanModel(json.id, json.name, position, json.movementRestrictions, currentCity, json.type);
     }
-    return new PersonModel(name, position);
+    return new PersonModel(json.id, json.name, position, json.movementRestrictions, currentCity, json.type);
   }
-
 }
 
 export class ShipModel extends VehicleModel {
-  constructor(name: string, position: CoordsModel) {
-    super(name, position, LocationType.Sea);
+  constructor(id: string, name: string, position: CoordsModel, movementRestrictions: LocationType, currentCity: CurrentVehicleCityModel | null, type: string) {
+    super(id, name, position, movementRestrictions, currentCity, type);
   }
 
   canMove(locationType: LocationType): boolean {
@@ -47,8 +38,8 @@ export class ShipModel extends VehicleModel {
 }
 
 export class CaravanModel extends VehicleModel {
-  constructor(name: string, position: CoordsModel) {
-    super(name, position, LocationType.Land);
+  constructor(id: string, name: string, position: CoordsModel, movementRestrictions: LocationType, currentCity: CurrentVehicleCityModel | null, type: string) {
+    super(id, name, position, movementRestrictions, currentCity, type);
   }
 
   canMove(locationType: LocationType): boolean {
@@ -57,8 +48,8 @@ export class CaravanModel extends VehicleModel {
 }
 
 export class PersonModel extends VehicleModel {
-  constructor(name: string, position: CoordsModel) {
-    super(name, position, LocationType.Both);
+  constructor(id: string, name: string, position: CoordsModel, movementRestrictions: LocationType, currentCity: CurrentVehicleCityModel | null, type: string) {
+    super(id, name, position, movementRestrictions, currentCity, type);
   }
 
   canMove(locationType: LocationType): boolean {
