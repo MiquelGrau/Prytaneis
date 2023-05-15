@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { WorldMapSettings } from '../../models/world-map-settings.model';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
@@ -19,38 +20,42 @@ export class WorldMapComponent implements OnInit, OnDestroy {
 
   renderer = new THREE.WebGLRenderer();
   scene!: THREE.Scene;
-  camera!: THREE.Camera;
-  mesh!: THREE.Mesh;
+  camera!: THREE.PerspectiveCamera;
+  mesh!: THREE.Object3D;  // Change Mesh to Object3D as GLTFLoader will load Object3D
   controls!: OrbitControls;
   composer!: EffectComposer;
   bloomLayer = new THREE.Layers();
 
   constructor() {
+    this.renderer = new THREE.WebGLRenderer();
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+    this.scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+    pointLight.position.set(0, 0, 20);
+    this.scene.add(pointLight);
+
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.scene.background = new THREE.Color('black');
     this.camera.layers.enable(1);
-    this.camera.position.z = 2;
+    this.camera.position.set(0, 0, 25)
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-    const geometry = new THREE.SphereGeometry(1, 32, 32);
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.setPath('assets/images/');
-    textureLoader.load('earth_map.jpeg', (texture) => {
-      texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
-      texture.minFilter = THREE.LinearMipmapLinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.generateMipmaps = true;
+    const loader = new GLTFLoader();
+    loader.load('assets/3dmodel/earth.glb', (gltf) => {
+      this.mesh = gltf.scene;
+      this.mesh.scale.set(0.02, 0.02, 0.02);
+      this.mesh.rotation.y += THREE.MathUtils.degToRad(180);
 
-      const material = new THREE.MeshBasicMaterial({ map: texture });
-      this.mesh = new THREE.Mesh(geometry, material);
-      this.mesh.layers.enable(1);  // Enable bloom layer
       this.scene.add(this.mesh);
 
       this.settings.markers.forEach(marker => {
         const markerSprite = this.createMarker(marker.lat, marker.lon);
-        markerSprite.layers.enable(1);  // Enable bloom layer
+        markerSprite.layers.enable(0);  // Assign to default layer
         this.mesh.add(markerSprite);
       });
 
@@ -60,7 +65,7 @@ export class WorldMapComponent implements OnInit, OnDestroy {
           const marker2 = this.settings.markers[j];
           const curve = this.createSurfacePath(marker1.lat, marker1.lon, marker2.lat, marker2.lon);
           const line = this.createPathLine(curve);
-          this.scene.add(line);
+          this.mesh.add(line);
         }
       }
 
@@ -85,8 +90,10 @@ export class WorldMapComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(this.rendererContainer.nativeElement.clientWidth, this.rendererContainer.nativeElement.clientHeight);
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
+    this.camera.aspect = this.rendererContainer.nativeElement.clientWidth / this.rendererContainer.nativeElement.clientHeight;
+    this.camera.updateProjectionMatrix();
   }
 
   ngOnDestroy() {
@@ -109,18 +116,18 @@ export class WorldMapComponent implements OnInit, OnDestroy {
   }
 
   latLongToVector3(lat: number, lon: number, radius: number) {
-    const phi = (90 - lat) * (Math.PI / 180);
-    const theta = (lon + 180) * (Math.PI / 180);
+    const phi = ((90 - lat) + 0.4) * (Math.PI / 180);
+    const theta = ((lon + 180) + 179.7) * (Math.PI / 180);
 
     return new THREE.Vector3(
-      -(radius * Math.sin(phi) * Math.cos(theta)),
+      -(radius * Math.sin(phi) * Math.sin(theta)),
       (radius * Math.cos(phi)),
-      (radius * Math.sin(phi) * Math.sin(theta))
+      -(radius * Math.sin(phi) * Math.cos(theta))
     );
   }
 
   createMarker(lat: number, lon: number) {
-    const markerSize = 0.01;  // Adjust the size of the marker here
+    const markerSize = 3;  // Increase the size of the marker
     const markerGeometry = new THREE.CircleGeometry(markerSize, 32);
 
     // Use a simple color for the marker
@@ -128,9 +135,8 @@ export class WorldMapComponent implements OnInit, OnDestroy {
 
     const markerMesh = new THREE.Mesh(markerGeometry, markerMaterial);
 
-    // We set the radius to 1, the same as the earth's radius in our scene,
-    // so the marker is in direct contact with the earth's surface
-    const position = this.latLongToVector3(lat, lon, 1);
+    // Increase the radius so the marker is slightly above the earth's surface
+    const position = this.latLongToVector3(lat, lon, 501);
     markerMesh.position.set(position.x, position.y, position.z);
 
     // Orient the marker to face upwards
@@ -140,14 +146,15 @@ export class WorldMapComponent implements OnInit, OnDestroy {
   }
 
   createSurfacePath(lat1: number, lon1: number, lat2: number, lon2: number) {
-    const start = this.latLongToVector3(lat1, lon1, 1);
-    const end = this.latLongToVector3(lat2, lon2, 1);
+    const radius = 501;  // Adjust this to match the model's scale
+    const start = this.latLongToVector3(lat1, lon1, radius);
+    const end = this.latLongToVector3(lat2, lon2, radius);
 
     // Calculate the angle between start and end vectors
     const angle = start.angleTo(end);
 
     // Calculate the number of intermediate points based on the angle
-    const smoothingFactor = 10;  // Increase this to make the paths smoother
+    const smoothingFactor = 20;  // Increase this to make the paths smoother
     const segments = Math.ceil(smoothingFactor * angle / (Math.PI / 180));  // One point per degree
 
     // Create an array to hold the points of the path
@@ -156,7 +163,7 @@ export class WorldMapComponent implements OnInit, OnDestroy {
     for (let i = 0; i <= segments; i++) {
       // Create a point along the shortest path on the sphere's surface between start and end
       const t = i / segments;
-      const point = start.clone().lerp(end, t).normalize().multiplyScalar(1.01);
+      const point = start.clone().lerp(end, t).normalize().multiplyScalar(radius);
 
       points.push(point);
     }
@@ -167,14 +174,15 @@ export class WorldMapComponent implements OnInit, OnDestroy {
     return curve;
   }
 
+
   createPathLine(curve: THREE.Curve<THREE.Vector3>) {
     const points = curve.getPoints(50);
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
     // Define a basic line material with a bright color
     const material = new THREE.LineBasicMaterial({
-      color: new THREE.Color('#E9C46A'),
-      linewidth: 1,
+      color: new THREE.Color('#d2fdfd'),
+      linewidth: 2,
     });
 
     const line = new THREE.Line(geometry, material);
@@ -186,3 +194,4 @@ export class WorldMapComponent implements OnInit, OnDestroy {
   }
 
 }
+
