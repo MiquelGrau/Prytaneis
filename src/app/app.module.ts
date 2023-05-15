@@ -14,12 +14,14 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { CustomAuthInterceptor } from './core/interceptors/custom-auth.interceptor';
 import { LobbyComponent } from './pages/lobby/lobby.component';
+import { WorldMapComponent } from './shared/components/world-map/world-map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
     LobbyComponent,
+    WorldMapComponent
   ],
   imports: [
     BrowserModule,
