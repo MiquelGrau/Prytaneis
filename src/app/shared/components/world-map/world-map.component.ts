@@ -30,13 +30,18 @@ export class WorldMapComponent implements OnInit, OnDestroy {
     this.renderer = new THREE.WebGLRenderer();
     this.scene = new THREE.Scene();
 
+
     // Add lights
-    const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+    const ambientLight = new THREE.AmbientLight(0xffffff); // soft white light
     this.scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-    pointLight.position.set(0, 0, 20);
-    this.scene.add(pointLight);
+    // // Add lights
+    // const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+    // this.scene.add(ambientLight);
+
+    // const pointLight = new THREE.PointLight(0xffffff, 5, 300);
+    // pointLight.position.set(0, 0, 20);
+    // this.scene.add(pointLight);
 
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.scene.background = new THREE.Color('black');
@@ -53,21 +58,24 @@ export class WorldMapComponent implements OnInit, OnDestroy {
 
       this.scene.add(this.mesh);
 
-      this.settings.markers.forEach(marker => {
-        const markerSprite = this.createMarker(marker.lat, marker.lon);
+      this.settings.cities.forEach(city => {
+        const markerSprite = this.createMarker(city.marker.lat, city.marker.lon);
         markerSprite.layers.enable(0);  // Assign to default layer
         this.mesh.add(markerSprite);
       });
 
-      for (let i = 0; i < this.settings.markers.length; i++) {
-        for (let j = i + 1; j < this.settings.markers.length; j++) {
-          const marker1 = this.settings.markers[i];
-          const marker2 = this.settings.markers[j];
-          const curve = this.createSurfacePath(marker1.lat, marker1.lon, marker2.lat, marker2.lon);
-          const line = this.createPathLine(curve);
-          this.mesh.add(line);
-        }
-      }
+      this.settings.nodes.forEach(node => {
+        node.connectionsId.forEach(connectionId => {
+          // Troba l'objecte de ruta corresponent
+          const pathObj = this.settings.paths.find(path => path.id === connectionId);
+          if (pathObj) {
+            const pathMarkerArray = pathObj.path;
+            const curve = this.createPathFromPoints(pathMarkerArray);
+            const line = this.createPathLine(curve);
+            this.mesh.add(line);
+          }
+        });
+      });
 
       // Setup EffectComposer and UnrealBloomPass
       this.composer = new EffectComposer(this.renderer);
@@ -100,6 +108,16 @@ export class WorldMapComponent implements OnInit, OnDestroy {
     this.controls.dispose();
   }
 
+  createPathFromPoints(points: Array<{lat: number, lon: number}>) {
+    const radius = 501;  // Adjust this to match the model's scale
+    const points3D = points.map(point => this.latLongToVector3(point.lat, point.lon, radius));
+
+    // Create a curve from the points
+    const curve = new THREE.CatmullRomCurve3(points3D);
+
+    return curve;
+  }
+
   animateRotation() {
     window.requestAnimationFrame(() => this.animateRotation());
     this.controls.update();
@@ -116,8 +134,8 @@ export class WorldMapComponent implements OnInit, OnDestroy {
   }
 
   latLongToVector3(lat: number, lon: number, radius: number) {
-    const phi = ((90 - lat) + 0.4) * (Math.PI / 180);
-    const theta = ((lon + 180) + 179.7) * (Math.PI / 180);
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = lon * (Math.PI / 180);
 
     return new THREE.Vector3(
       -(radius * Math.sin(phi) * Math.sin(theta)),
@@ -127,7 +145,7 @@ export class WorldMapComponent implements OnInit, OnDestroy {
   }
 
   createMarker(lat: number, lon: number) {
-    const markerSize = 3;  // Increase the size of the marker
+    const markerSize = 1;  // Increase the size of the marker
     const markerGeometry = new THREE.CircleGeometry(markerSize, 32);
 
     // Use a simple color for the marker
@@ -182,7 +200,7 @@ export class WorldMapComponent implements OnInit, OnDestroy {
     // Define a basic line material with a bright color
     const material = new THREE.LineBasicMaterial({
       color: new THREE.Color('#d2fdfd'),
-      linewidth: 2,
+      linewidth: 5,
     });
 
     const line = new THREE.Line(geometry, material);

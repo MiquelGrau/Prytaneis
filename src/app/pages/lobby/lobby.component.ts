@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { WorldMapMarker, WorldMapSettings } from 'src/app/shared/models/world-map-settings.model';
+import {
+  IWorldMapMarker, IWorldMapPath, WorldMapCity, WorldMapMarker, WorldMapNode,
+  WorldMapSettings
+} from 'src/app/shared/models/world-map-settings.model';
+import { dijkstraAlgorithm } from '../../shared/utils/worldmap-utils';
 
 @Component({
   selector: 'app-lobby',
@@ -12,29 +16,63 @@ export class LobbyComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    const markers: WorldMapMarker[] = [
-      { lat: 40.7128, lon: -74.0060 }, // New York City, USA
-      { lat: 34.0522, lon: -118.2437 }, // Los Angeles, USA
-      { lat: 51.5074, lon: -0.1278 }, // London, United Kingdom
-      { lat: 48.8566, lon: 2.3522 }, // Paris, France
-      { lat: 35.6895, lon: 139.6917 }, // Tokyo, Japan
-      { lat: 39.9042, lon: 116.4074 }, // Beijing, China
-      { lat: 28.6139, lon: 77.2090 }, // Delhi, India
-      { lat: 19.0760, lon: 72.8777 }, // Mumbai, India
-      { lat: 31.5204, lon: 74.3587 }, // Lahore, Pakistan
-      { lat: -23.5505, lon: -46.6333 }, // Sao Paulo, Brazil
-      { lat: 41.8781, lon: -87.6298 }, // Chicago, USA
-      { lat: 24.8607, lon: 67.0011 }, // Karachi, Pakistan
-      { lat: 34.3416, lon: 108.9398 }, // Xi'an, China
-      { lat: 37.5665, lon: 126.9780 }, // Seoul, South Korea
-      { lat: -33.9249, lon: 18.4241 }, // Cape Town, South Africa
-      { lat: -34.6037, lon: -58.3816 }, // Buenos Aires, Argentina
-      { lat: 59.9139, lon: 10.7522 }, // Oslo, Norway
-      { lat: 55.6761, lon: 12.5683 }, // Copenhagen, Denmark
-      { lat: -31.9505, lon: 115.8605 }, // Perth, Australia
-      { lat: 52.5200, lon: 13.4050 }, // Berlin, Germany
+
+    const markers: IWorldMapMarker[] = [
+      { lat: 39.2148, lon: 9.1105 }, // Cagliari
+      { lat: 36.7432, lon: 3.0860 }, // Algiers
     ];
 
-    this.settings = new WorldMapSettings(markers);
+    const barcelonaMarker = new WorldMapMarker(41.2030, 2.3586);
+    const cadizMarker = new WorldMapMarker(36.5106, -6.3109);
+    const marseilleMarker = new WorldMapMarker(43.2957, 5.3715);
+
+    const barcelonaNode = new WorldMapNode('barcelonaNode', barcelonaMarker, []);
+    const cadizNode = new WorldMapNode('cadizNode', cadizMarker, []);
+    const marseilleNode = new WorldMapNode('marseilleNode', marseilleMarker, []);
+
+    const cadizBarcelonaPathObj: IWorldMapPath = {
+      id: 'cadizBarcelonaPath',
+      nodes: [cadizNode, barcelonaNode],
+      path: [
+        { lat: 36.2311, lon: -6.5943 },
+        { lat: 35.9319, lon: -5.6246 },
+        { lat: 36.3932, lon: -4.2653 },
+        { lat: 36.5957, lon: -1.7719 },
+        { lat: 37.3802, lon: -0.5428 },
+        { lat: 38.7523, lon: 0.5603 },
+        { lat: 40.4981, lon: 0.9683 },
+        { lat: 41.2030, lon: 2.3586 },
+      ],
+      speed: 1
+    };
+
+    const barcelonaMarseillePathObj: IWorldMapPath = {
+      id: 'barcelonaMarseillePath',
+      nodes: [barcelonaNode, marseilleNode],
+      path: [
+        { lat: 41.2030, lon: 2.3586 },
+        { lat: 41.9475, lon: 3.5367 },
+        { lat: 43.0315, lon: 4.2378 },
+      ],
+      speed: 1
+    };
+
+    barcelonaNode.connectionsId.push(cadizBarcelonaPathObj.id, barcelonaMarseillePathObj.id);
+    cadizNode.connectionsId.push(cadizBarcelonaPathObj.id);
+    marseilleNode.connectionsId.push(barcelonaMarseillePathObj.id);
+
+    const barcelona = new WorldMapCity('barcelona', barcelonaNode.id, barcelonaMarker);
+    const cadiz = new WorldMapCity('cadiz', cadizNode.id, cadizMarker);
+    const marseille = new WorldMapCity('marseille', marseilleNode.id, marseilleMarker);
+
+    const cities = [barcelona, cadiz, marseille];
+    const nodes = [barcelonaNode, cadizNode, marseilleNode];
+    const paths = [cadizBarcelonaPathObj, barcelonaMarseillePathObj]
+
+    const shortestPath = dijkstraAlgorithm('cadizNode', 'marseilleNode', nodes, paths);
+    console.log(shortestPath);
+
+    this.settings = new WorldMapSettings(cities, nodes, shortestPath);
+
   }
 }
