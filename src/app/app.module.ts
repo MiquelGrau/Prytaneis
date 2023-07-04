@@ -19,9 +19,7 @@ import { WorldMapComponent } from './shared/components/world-map/world-map.compo
 @NgModule({
   declarations: [
     AppComponent,
-    SignInComponent,
-    LobbyComponent,
-    WorldMapComponent
+    SignInComponent
   ],
   imports: [
     BrowserModule,

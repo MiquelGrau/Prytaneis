@@ -2,12 +2,12 @@ import { IWorldMapMarker, IWorldMapNode, IWorldMapPath } from '../models/world-m
 
 export function haversineDistance(marker1: IWorldMapMarker, marker2: IWorldMapMarker): number {
   const R = 6371; // Radi de la Terra en km
-  const dLat = degreesToRadians(marker2.lat - marker1.lat);
-  const dLon = degreesToRadians(marker2.lon - marker1.lon);
+  const dLat = degreesToRadians(marker2.latitude - marker1.latitude);
+  const dLon = degreesToRadians(marker2.longitude - marker1.longitude);
 
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(degreesToRadians(marker1.lat)) * Math.cos(degreesToRadians(marker2.lat)) *
+    Math.cos(degreesToRadians(marker1.latitude)) * Math.cos(degreesToRadians(marker2.latitude)) *
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
@@ -40,7 +40,7 @@ export function dijkstraAlgorithm(startNodeId: string, endNodeId: string, nodes:
       let previousPath = previousPaths[endNodeId];
       while (previousPath) {
         path.push(previousPath);
-        previousPath = previousPaths[previousPath.nodes.find(node => node.id !== currentNode.id)?.id || ''];
+        previousPath = previousPaths[previousPath.startNodeId === currentNode.id ? previousPath.endNodeId : previousPath.startNodeId];
       }
       path.reverse();
       return path;
@@ -50,18 +50,15 @@ export function dijkstraAlgorithm(startNodeId: string, endNodeId: string, nodes:
       continue;
     }
 
-    for (const connectionId of currentNode.connectionsId) {
-      const pathObj = paths.find(path => path.id === connectionId);
-      if (pathObj) {
-        const connectedNode = pathObj.nodes.find(node => node.id !== currentNode.id);
-        if (connectedNode) {
-          const distance = distances[currentNode.id] + haversineDistance(currentNode.marker, connectedNode.marker) / pathObj.speed;
-
-          if (distance < distances[connectedNode.id]) {
-            distances[connectedNode.id] = distance;
-            previousPaths[connectedNode.id] = pathObj;
-            queue.push(connectedNode);
-          }
+    for (const pathObj of paths.filter(path => path.startNodeId === currentNode.id || path.endNodeId === currentNode.id)) {
+      const connectedNodeId = pathObj.startNodeId === currentNode.id ? pathObj.endNodeId : pathObj.startNodeId;
+      const connectedNode = nodes.find(node => node.id === connectedNodeId);
+      if (connectedNode) {
+        const distance = distances[currentNode.id] + haversineDistance(currentNode.marker, connectedNode.marker) / pathObj.speed;
+        if (distance < distances[connectedNodeId]) {
+          distances[connectedNodeId] = distance;
+          previousPaths[connectedNodeId] = pathObj;
+          queue.push(connectedNode);
         }
       }
     }

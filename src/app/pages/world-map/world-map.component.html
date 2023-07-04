@@ -5,7 +5,7 @@
     <ul>
       <li *ngFor="let city of (cities$ | async)" (click)="loadCity(city.id)">
         <strong>Name:</strong> {{ city.name }}<br>
-        <strong>Location:</strong> {{ city.position.y }}, {{ city.position.x }}<br>
+        <strong>Location:</strong> {{ city.position.latitude }}, {{ city.position.longitude }}<br>
         <strong>Type:</strong> {{ city.locationType }}<br>
         <strong>Vehicles:</strong>
         <ul class="vehicles">

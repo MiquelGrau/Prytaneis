@@ -1,8 +1,8 @@
 export class CoordsModel {
-  constructor(public x: number, public y: number) {}
+  constructor(public longitude: number, public latitude: number) {}
 
   static fromJson(json: any): CoordsModel {
-    return new CoordsModel(json.x, json.y);
+    return new CoordsModel(json.longitude, json.latitude);
   }
 
   static getRandomCoords(): CoordsModel {
@@ -19,12 +19,12 @@ export class CoordsModel {
    */
   static calcDistance(coord1: CoordsModel, coord2: CoordsModel): number {
     const R = 6371; // Radius of the earth in km
-    const dLat = this.deg2rad(coord2.x - coord1.x);
-    const dLon = this.deg2rad(coord2.y - coord1.y);
+    const dLat = this.deg2rad(coord2.longitude - coord1.longitude);
+    const dLon = this.deg2rad(coord2.latitude - coord1.latitude);
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(coord1.x)) *
-      Math.cos(this.deg2rad(coord2.x)) *
+      Math.cos(this.deg2rad(coord1.longitude)) *
+      Math.cos(this.deg2rad(coord2.longitude)) *
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));

@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'lobby',
-    component: LobbyComponent,
+    loadChildren: () => import('./pages/lobby/lobby.module').then((m) => m.LobbyModule),
     canActivate: [AuthGuard],
   },
   {
